@@ -86,17 +86,45 @@ def download_file(download_id):
     session_folder = os.path.join(Config.TEMP_FOLDER, download_id)
     if not os.path.exists(session_folder):
         return jsonify({"error": "Download not found"}), 404
+    
     files = list(Path(session_folder).glob("*.mp4"))
     if not files:
         return jsonify({"error": "No files found"}), 404
+    
+    # Single file - return direct download with proper headers
     if len(files) == 1:
-        return send_file(files[0], as_attachment=True)
+        file_path = files[0]
+        filename = file_path.name
+        
+        # Set headers to trigger browser download
+        response = send_file(
+            file_path,
+            as_attachment=True,
+            download_name=filename,
+            mimetype='video/mp4'
+        )
+        
+        # Add headers to ensure browser triggers download dialog
+        response.headers['Content-Disposition'] = f'attachment; filename="{filename}"'
+        response.headers['Content-Type'] = 'video/mp4'
+        
+        return response
     else:
+        # Multiple files - create and return zip
         zip_path = os.path.join(Config.TEMP_FOLDER, f"{download_id}.zip")
         shutil.make_archive(zip_path[:-4], "zip", session_folder)
-        return send_file(
-            zip_path, as_attachment=True, download_name="youtube_videos.zip"
+        
+        response = send_file(
+            zip_path,
+            as_attachment=True,
+            download_name="youtube_videos.zip",
+            mimetype='application/zip'
         )
+        
+        response.headers['Content-Disposition'] = 'attachment; filename="youtube_videos.zip"'
+        response.headers['Content-Type'] = 'application/zip'
+        
+        return response
 
 
 @bp.route("/cleanup/<download_id>", methods=["POST"])

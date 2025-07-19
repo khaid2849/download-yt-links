@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 /* Base styles */
 :root {
@@ -26,6 +24,7 @@ body {
   margin: 0;
   min-height: 100vh;
   overflow-x: hidden;
+  background-color: #0a0a1f;
 }
 
 /* Ensure Vue app takes full height */
@@ -40,7 +39,7 @@ html {
 
 /* Selection colors */
 ::selection {
-  background-color: rgba(236, 72, 153, 0.3);
+  background-color: rgba(147, 51, 234, 0.3);
   color: white;
 }
 
@@ -50,44 +49,7 @@ html {
 }
 
 :focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline: 2px solid rgba(147, 51, 234, 0.5);
   outline-offset: 2px;
   border-radius: 0.5rem;
-}
-
-/* Transition classes for Vue */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-/* Custom utility classes */
-@layer utilities {
-  .animation-delay-100 {
-    animation-delay: 100ms;
-  }
-  .animation-delay-200 {
-    animation-delay: 200ms;
-  }
-  .animation-delay-300 {
-    animation-delay: 300ms;
-  }
-  .animation-delay-400 {
-    animation-delay: 400ms;
-  }
-  .animation-delay-500 {
-    animation-delay: 500ms;
-  }
-}
-
-/* Prevent horizontal scroll on mobile */
-@media (max-width: 640px) {
-  body {
-    overflow-x: hidden;
-  }
 }
